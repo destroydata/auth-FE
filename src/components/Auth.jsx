@@ -1,49 +1,53 @@
-import {useNavigate} from "react-router";
-import {useEffect} from "react";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
-const Auth = ()=>{
-    const nav= useNavigate();
+const Auth = () => {
+    const nav = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search)
     const auth = queryParameters.get("auth")
-    const check = ()=>{
+    const check = () => {
         // 192.168.0.184
-        fetch("http://localhost:8080/api/v1/myuser/me",
+        fetch("http://192.168.0.184:8080/api/v1/myuser/me",
             {
-                headers:{
+                headers: {
                     "Authorization": `Bearer ${auth}`
                 }
             })
-            .then(res=>
+            .then(res =>
                 res.json()
             )
-            .then(body=> {
+            .then(body => {
                 console.log(body)
                 localStorage.setItem("token", auth)
                 nav("/home")
             })
-            .catch(e=>
+            .catch(e =>
                 getMe()
             )
     }
-    const getMe = ()=> {
-        return fetch(`http://localhost:8080/api/v1/auth/me`,
-            {headers:{
+    const getMe = () => {
+        return fetch(`http://192.168.0.184:8080/api/v1/auth/me`,
+            {
+                headers: {
                     "Authorization": `Bearer ${auth}`
-                }}
+                }
+            }
         )
-            .then(res=>
+            .then(res =>
                 res.json()
             )
-            .then(body=> {
-                nav("/my/register",{state: {me:body}})
+            .then(body => {
+                nav("/my/register", { state: { me: body } })
             })
-            .catch(()=>nav("/login"))
+            .catch(() => nav("/login"))
     }
-    useEffect(()=>{
+    useEffect(() => {
         check()
-    },[])
+    }, [])
     return <div>
         <h1>loading....</h1>
     </div>
 }
 export default Auth
+
+

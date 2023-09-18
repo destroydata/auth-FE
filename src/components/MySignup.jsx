@@ -1,61 +1,61 @@
-import {useEffect, useState} from "react";
-import {useLocation, useNavigate, useParams} from "react-router";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router";
 
-const MySignup = ()=>{
+const MySignup = () => {
     const location = useLocation()
 
 
-    const [user,setUser] = useState({
-        email:"", username:"", role:"",age:0
+    const [user, setUser] = useState({
+        email: "", username: "", role: "", age: 0
     })
-    useEffect(()=>{
-        if(location.state.me){
-            setUser({...user,...location.state.me})
+    useEffect(() => {
+        if (location.state.me) {
+            setUser({ ...user, ...location.state.me })
         }
-    },[location])
+    }, [location])
     const nav = useNavigate()
-    const onSubmitHandler = (e)=>{
+    const onSubmitHandler = (e) => {
         e.preventDefault();
         login()
     }
-    const login= ()=>{
+    const login = () => {
         // 192.168.0.184
-        fetch("http://localhost:8080/api/v1/myuser",
+        fetch("http://192.168.0.184:8080/api/v1/myuser",
             {
-                method:"POST",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     // 'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: JSON.stringify(user)
             })
-            .then(res=>
+            .then(res =>
                 res.json()
             )
-            .then(body=>
+            .then(body =>
                 console.log(body)
                 // nav(`/auth?body=${body.}`)
             )
-            .catch(e=>
+            .catch(e =>
                 console.log(e)
                 // setMsg(e.response.messages)
             )
 
     }
-    const onChangeHandler = (e)=> {
-        const {name, value} =e.target
-        setUser({...user, [name]: value})
+    const onChangeHandler = (e) => {
+        const { name, value } = e.target
+        setUser({ ...user, [name]: value })
     }
     return <form onSubmit={onSubmitHandler}>
         <input type={"email"} name={"email"} onChange={onChangeHandler}
-        value={user.email} disabled
+            value={user.email} disabled
         />
         <input type={"text"} name={"username"} onChange={onChangeHandler}
-               value={user.username} disabled/>
+            value={user.username} disabled />
         <input type={"number"} name={"age"} onChange={onChangeHandler}
-               value={user.age}
+            value={user.age} placeholder="age"
         />
-        <input type={"submit"} value={"login"} onChange={onChangeHandler}/>
+        <input type={"submit"} value={"login"} onChange={onChangeHandler} />
     </form>
 }
 export default MySignup

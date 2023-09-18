@@ -1,7 +1,7 @@
-import {useState} from "react";
-import {json, useNavigate} from "react-router";
+import { useState } from "react";
+import { json, useNavigate } from "react-router";
 
-const Signup = ()=>{
+const Signup = () => {
     const roles = [
         'YJ',
         'KS',
@@ -11,50 +11,49 @@ const Signup = ()=>{
         'JH',
         'TEST'
     ]
-    const [user,setUser] = useState({
-        email:"", password:"",username:"", role:""
-
+    const [user, setUser] = useState({
+        email: "", password: "", username: "", role: ""
     })
     const nav = useNavigate()
-    const onSubmitHandler = (e)=>{
+    const onSubmitHandler = (e) => {
         e.preventDefault();
         login()
     }
-    const login= ()=>{
+    const login = () => {
         // 192.168.0.184
-        fetch("http://localhost:8080/api/v1/auth/signup",
+        fetch("http://192.168.0.184:8080/api/v1/auth/signup",
             {
-                method:"POST",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     // 'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: JSON.stringify(user)
             })
-            .then(res=> {
-                    if (res.status === 200) nav(`/login`)
-                }
+            .then(res => {
+                if (res.status === 200) nav(`/login`)
+            }
             )
-            .catch(e=>
+            .catch(e =>
                 console.log(e)
             )
 
     }
-    const onChangeHandler = (e)=> {
-        const {name, value} =e.target
-        setUser({...user, [name]: value})
+    const onChangeHandler = (e) => {
+        const { name, value } = e.target
+        setUser({ ...user, [name]: value })
     }
     return <form onSubmit={onSubmitHandler}>
-        <input type={"email"} name={"email"} onChange={onChangeHandler}/>
-        <input type={"text"} name={"username"} onChange={onChangeHandler}/>
-        <input type={"password"} name={"password"} onChange={onChangeHandler}/>
+        <input placeholder="email" type={"email"} name={"email"} onChange={onChangeHandler} />
+        <input placeholder="username" type={"text"} name={"username"} onChange={onChangeHandler} />
+        <input placeholder="password" type={"password"} name={"password"} onChange={onChangeHandler} />
         <select onChange={onChangeHandler} name={'role'}>
             <option></option>
-            {roles.map(role=>
+            {roles.map(role =>
                 <option key={role} value={role}>{role}</option>
             )}
         </select>
-        <input type={"submit"} value={"login"} onChange={onChangeHandler}/>
+        <input type={"submit"} value={"login"} onChange={onChangeHandler} />
     </form>
 }
 export default Signup
